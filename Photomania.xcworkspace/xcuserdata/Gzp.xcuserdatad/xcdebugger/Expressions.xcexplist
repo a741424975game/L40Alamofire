@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "PhotoBrowserCollectionViewController.(getPopularPhotos() -&gt; ()).(closure #1).(closure #3):PhotoBrowserCollectionViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "lastItem..&lt;self.photos.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotoBrowserCollectionViewController.(getPopularPhotos() -&gt; ()).(closure #1):PhotoBrowserCollectionViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "currentPage">
+            </PersistentString>
+            <PersistentString
+               value = "lastItem..&lt;self.photos.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
