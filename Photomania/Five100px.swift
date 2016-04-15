@@ -9,6 +9,53 @@
 import UIKit
 import Alamofire
 
+//自定义Serialization
+extension Request {
+    
+    /**
+     创建一个 image serializer
+     */
+    public static func ImageResponseSerializer()
+        -> ResponseSerializer<UIImage, NSError>
+    {
+        return ResponseSerializer { _, response, data, error in
+            guard error == nil else { return .Failure(error!) }
+            
+            if let response = response where response.statusCode == 204 { return .Success(UIImage()) }
+            
+            guard let validData = data where validData.length > 0 else {
+                let failureReason = "Data could not be serialized. Input data was nil or zero length."
+                let error = Error.errorWithCode(.DataSerializationFailed, failureReason: failureReason)
+                return .Failure(error)
+            }
+            
+            if let image = UIImage(data: data!) {
+                return .Success(image)
+            } else {
+                return .Failure(error! as NSError)
+            }
+            
+        }
+    }
+    
+    /**
+     处理 image 闭包
+     */
+    public func responseImage(
+        queue queue: dispatch_queue_t? = nil,
+              completionHandler: Response<UIImage, NSError> -> Void)
+        -> Self
+    {
+        return response(
+            queue: queue,
+            responseSerializer: Request.ImageResponseSerializer(),
+            completionHandler: completionHandler
+        )
+    }
+}
+
+
+
 struct Five100px {
   enum ImageSize: Int {
     case Tiny = 1
@@ -18,7 +65,7 @@ struct Five100px {
     case XLarge = 5
   }
     
-    
+
     
 
         //组合url枚举类型

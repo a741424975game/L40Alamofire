@@ -8,12 +8,15 @@
 
 import UIKit
 import QuartzCore
+import Alamofire
 
 class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopoverPresentationControllerDelegate, UIActionSheetDelegate {
   var photoID: Int = 0
+    var imageUrl: String = ""
+    
   
+    @IBOutlet weak var imageView: UIImageView!
   let scrollView = UIScrollView()
-  let imageView = UIImageView()
   let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
   
   var photoInfo: PhotoInfo?
@@ -24,7 +27,34 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     super.viewDidLoad()
     
     setupView()
+    
+    
+    if photoInfo != nil {
+        photoID = (photoInfo?.id)!
+        self.getHighDefinitionPhoto(self.photoID)
+    }
+ 
+    
+
   }
+    
+    func getHighDefinitionPhoto(photoID: Int) {
+        //调用my500pxAPI 详见https://github.com/a741424975game/my500pxAPI
+        let url = "http://gzpweb.imwork.net/photo/\(photoID)"
+        
+        Alamofire.request(.GET, url).responseJSON { (response) in
+            if let str = response.result.value?.valueForKey("imageUrl") {
+                self.imageUrl = (str as? String)!
+                print(self.imageUrl)
+                print("imageUrl load")
+                Alamofire.request(.GET, self.imageUrl).responseImage(completionHandler: { (response) in
+                   print(response.result.value!)
+                    self.imageView.image = response.result.value!
+                    self.addButtomBar()
+                })
+            }
+        }
+    }
   
   func setupView() {
     navigationController?.setNavigationBarHidden(false, animated: true)
@@ -41,15 +71,15 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     scrollView.zoomScale = 1.0
     view.addSubview(scrollView)
     
-    imageView.contentMode = .ScaleAspectFill
+
     scrollView.addSubview(imageView)
     
-    let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: "handleDoubleTap:")
+    let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(PhotoViewerViewController.handleDoubleTap(_:)))
     doubleTapRecognizer.numberOfTapsRequired = 2
     doubleTapRecognizer.numberOfTouchesRequired = 1
     scrollView.addGestureRecognizer(doubleTapRecognizer)
     
-    let singleTapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+    let singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(PhotoViewerViewController.handleSingleTap(_:)))
     singleTapRecognizer.numberOfTapsRequired = 1
     singleTapRecognizer.numberOfTouchesRequired = 1
     singleTapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer)
@@ -76,14 +106,14 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     
     let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
     
-    items.append(barButtonItemWithImageNamed("hamburger", title: nil, action: "showDetails"))
+    items.append(barButtonItemWithImageNamed("hamburger", title: nil, action: #selector(PhotoViewerViewController.showDetails)))
     
     if photoInfo?.commentsCount > 0 {
-      items.append(barButtonItemWithImageNamed("bubble", title: "\(photoInfo?.commentsCount ?? 0)", action: "showComments"))
+      items.append(barButtonItemWithImageNamed("bubble", title: "\(photoInfo?.commentsCount ?? 0)", action: #selector(PhotoViewerViewController.showComments)))
     }
     
     items.append(flexibleSpace)
-    items.append(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: "showActions"))
+    items.append(UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action: #selector(PhotoViewerViewController.showActions)))
     items.append(flexibleSpace)
     
     items.append(barButtonItemWithImageNamed("like", title: "\(photoInfo?.votesCount ?? 0)"))
@@ -162,6 +192,7 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
   
   func showActions() {
     let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Download Photo")
+    
     actionSheet.showFromToolbar(navigationController!.toolbar)
   }
   

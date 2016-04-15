@@ -21,7 +21,7 @@ class PhotoCommentsViewController: UITableViewController {
     tableView.estimatedRowHeight = 50.0
     
     title = "Comments"
-    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .Done, target: self, action: "dismiss")
+    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(PhotoCommentsViewController.dismiss))
   }
   
   func dismiss() {

@@ -3,6 +3,25 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PhotoBrowserCollectionViewController.(getPopularPhotos() -&gt; ()).(closure #1):PhotoBrowserCollectionViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "currentPage">
+            </PersistentString>
+            <PersistentString
+               value = "lastItem..&lt;self.photos.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotoViewerViewController.getHighDefinitionPhoto(Int) -&gt; ():PhotoViewerViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.imageUrl">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PhotoBrowserCollectionViewController.(getPopularPhotos() -&gt; ()).(closure #1).(closure #3):PhotoBrowserCollectionViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -11,13 +30,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "PhotoBrowserCollectionViewController.(getPopularPhotos() -&gt; ()).(closure #1):PhotoBrowserCollectionViewController.swift">
+         contextName = "PhotoBrowserCollectionViewController.(collectionView(UICollectionView, cellForItemAtIndexPath : NSIndexPath) -&gt; UICollectionViewCell).(closure #1):PhotoBrowserCollectionViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "currentPage">
-            </PersistentString>
-            <PersistentString
-               value = "lastItem..&lt;self.photos.count">
+               value = "self.images.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

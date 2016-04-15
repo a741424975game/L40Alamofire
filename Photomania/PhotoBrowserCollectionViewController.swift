@@ -13,6 +13,8 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
     
     var photos = Array<PhotoInfo>()
     
+    var images = Array<UIImage>()
+    
     var isGettingPhotos:Bool = false
     
     var currentPage: Int = 1
@@ -55,7 +57,7 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
     
     func getPopularPhotos() {
         if !self.isGettingPhotos {
-                    isGettingPhotos = true
+            isGettingPhotos = true
             Alamofire.request(Five100px.Router.Popular(currentPage)).responseJSON(queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), options: NSJSONReadingOptions.AllowFragments) { (response) in
                 if let json = response.result.value as? NSDictionary {
                     var safephotos = json.valueForKey("photos") as! [NSDictionary]
@@ -80,11 +82,10 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
                         self.collectionView?.insertItemsAtIndexPaths(indexPath)
                     })
                     
-                    self.currentPage += 1
                     self.isGettingPhotos = false
                 }
             }
-
+            self.currentPage += 1
         }
     }
     
@@ -113,11 +114,57 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
     
     let imgUrl = photo.url
     
-    Alamofire.request(.GET, imgUrl).response { (_, _, data, _) in
-        if let img = data {
-            cell.imageView.image = UIImage(data: img)
+//    Alamofire.request(.GET, imgUrl).responseImage { (response) in
+//        let imageIsExist = self.images.contains({ (image) -> Bool in
+//            if image == response.result.value {
+//                return true
+//            } else {
+//                return false
+//            }
+//        })
+//        if imageIsExist == false {
+//            self.images.append(response.result.value!)
+//        }
+//    }
+    
+    cell.imageView.image = nil  // 解决因为cell的复用产生的图片闪烁变化
+    //想用一个UIImage数组缓存从网络下载的图片  但是当图片过多是内存占用过多 不可行   若要解决的话应该用文件系统缓存 不应该用内存缓存
+//    cell.request = Alamofire.request(.GET, imgUrl).responseImage(queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 1)) { (response) in
+//        let imageIsExist = self.images.contains({ (image) -> Bool in
+//            if image == response.result.value {
+//                dispatch_async(dispatch_get_main_queue(), { 
+//                    cell.imageView.image = self.images[indexPath.row]
+//                })
+//                 return true
+//            } else {
+//                 return false
+//                }
+//            })
+//            if imageIsExist == false {
+//                if let img = response.result.value {
+//                    if response.request?.URLString == cell.request?.request?.URLString {
+//                        dispatch_async(dispatch_get_main_queue(), {
+//                            cell.imageView.image = img
+//                        })
+//                    }
+//                }
+//                self.images.append(response.result.value!)
+//            }
+//
+//    }
+    
+
+    cell.request = Alamofire.request(.GET, imgUrl).responseImage { (response) in
+        if let img = response.result.value {
+            if response.request?.URLString == cell.request?.request?.URLString {
+                cell.imageView.image = img
+            }
         }
     }
+    
+
+    
+    
     
     return cell
   }
@@ -127,7 +174,7 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
   }
   
   override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-    performSegueWithIdentifier("ShowPhoto", sender: self.photos[self.photos.startIndex.advancedBy(indexPath.item)].id)
+    performSegueWithIdentifier("ShowPhoto", sender: self.photos[self.photos.startIndex.advancedBy(indexPath.item)])
   }
   
   // MARK: Helper
@@ -155,13 +202,13 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
     collectionView.registerClass(PhotoBrowserCollectionViewLoadingCell.classForCoder(), forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: PhotoBrowserFooterViewIdentifier)
     
     refreshControl.tintColor = UIColor.whiteColor()
-    refreshControl.addTarget(self, action: "handleRefresh", forControlEvents: .ValueChanged)
+    refreshControl.addTarget(self, action: #selector(PhotoBrowserCollectionViewController.handleRefresh), forControlEvents: .ValueChanged)
     collectionView.addSubview(refreshControl)
   }
   
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "ShowPhoto" {
-      (segue.destinationViewController as! PhotoViewerViewController).photoID = sender!.integerValue
+      (segue.destinationViewController as! PhotoViewerViewController).photoInfo = sender as? PhotoInfo
       (segue.destinationViewController as! PhotoViewerViewController).hidesBottomBarWhenPushed = true
     }
   }
@@ -172,34 +219,35 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
 }
 
 class PhotoBrowserCollectionViewCell: UICollectionViewCell {
-  let imageView = UIImageView()
-  
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-  }
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+    let imageView = UIImageView()
+    var request: Alamofire.Request?
     
-    backgroundColor = UIColor(white: 0.1, alpha: 1.0)
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+  
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     
-    imageView.frame = bounds
-    addSubview(imageView)
-  }
+        backgroundColor = UIColor(white: 0.1, alpha: 1.0)
+    
+        imageView.frame = bounds
+        addSubview(imageView)
+    }
 }
 
 class PhotoBrowserCollectionViewLoadingCell: UICollectionReusableView {
-  let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
+    let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
   
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-  }
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
   
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     
-    spinner.startAnimating()
-    spinner.center = self.center
-    addSubview(spinner)
-  }
+        spinner.startAnimating()
+        spinner.center = self.center
+        addSubview(spinner)
+    }
 }
