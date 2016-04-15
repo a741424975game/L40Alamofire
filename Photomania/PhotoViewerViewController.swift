@@ -16,8 +16,10 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     
   
     @IBOutlet weak var imageView: UIImageView!
-  let scrollView = UIScrollView()
-  let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+//  let scrollView = UIScrollView()
+//  let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
   
   var photoInfo: PhotoInfo?
   
@@ -38,6 +40,8 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
 
   }
     
+    
+    
     func getHighDefinitionPhoto(photoID: Int) {
         //调用my500pxAPI 详见https://github.com/a741424975game/my500pxAPI
         let url = "http://gzpweb.imwork.net/photo/\(photoID)"
@@ -45,10 +49,7 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
         Alamofire.request(.GET, url).responseJSON { (response) in
             if let str = response.result.value?.valueForKey("imageUrl") {
                 self.imageUrl = (str as? String)!
-                print(self.imageUrl)
-                print("imageUrl load")
                 Alamofire.request(.GET, self.imageUrl).responseImage(completionHandler: { (response) in
-                   print(response.result.value!)
                     self.imageView.image = response.result.value!
                     self.addButtomBar()
                 })
@@ -59,20 +60,22 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
   func setupView() {
     navigationController?.setNavigationBarHidden(false, animated: true)
     
-    spinner.center = CGPoint(x: view.center.x, y: view.center.y - view.bounds.origin.y / 2.0)
-    spinner.hidesWhenStopped = true
-    spinner.startAnimating()
-    view.addSubview(spinner)
+    self.spinner.center = CGPoint(x: view.center.x, y: view.center.y - view.bounds.origin.y / 2.0)
+    self.spinner.hidesWhenStopped = true
+    self.spinner.startAnimating()
     
-    scrollView.frame = view.bounds
-    scrollView.delegate = self
-    scrollView.minimumZoomScale = 1.0
-    scrollView.maximumZoomScale = 3.0
-    scrollView.zoomScale = 1.0
-    view.addSubview(scrollView)
+    self.view.addSubview(spinner)
+    
+//    self.scrollView.frame = view.bounds
+    self.scrollView.delegate = self
+    self.scrollView.minimumZoomScale = 1.0
+    self.scrollView.maximumZoomScale = 3.0
+    self.scrollView.zoomScale = 1.0
+    
+    self.view.addSubview(scrollView)
     
 
-    scrollView.addSubview(imageView)
+    self.scrollView.addSubview(imageView)
     
     let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(PhotoViewerViewController.handleDoubleTap(_:)))
     doubleTapRecognizer.numberOfTapsRequired = 2
@@ -83,7 +86,7 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     singleTapRecognizer.numberOfTapsRequired = 1
     singleTapRecognizer.numberOfTouchesRequired = 1
     singleTapRecognizer.requireGestureRecognizerToFail(doubleTapRecognizer)
-    scrollView.addGestureRecognizer(singleTapRecognizer)
+    self.scrollView.addGestureRecognizer(singleTapRecognizer)
   }
   
   override func viewWillAppear(animated: Bool) {

@@ -71,23 +71,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vht-dF-6tO">
-                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
-                                </accessibility>
-                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="48h-Wi-uZb">
+                                <rect key="frame" x="282" y="281" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kno-bP-mrh">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vht-dF-6tO">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                        </accessibility>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="vht-dF-6tO" firstAttribute="top" secondItem="Kno-bP-mrh" secondAttribute="top" constant="64" id="4ji-7L-mTX"/>
+                                    <constraint firstItem="vht-dF-6tO" firstAttribute="leading" secondItem="Kno-bP-mrh" secondAttribute="leading" id="Dg6-8w-0ip"/>
+                                    <constraint firstAttribute="trailing" secondItem="vht-dF-6tO" secondAttribute="trailing" id="PzF-iQ-eDT"/>
+                                    <constraint firstItem="vht-dF-6tO" firstAttribute="centerY" secondItem="Kno-bP-mrh" secondAttribute="centerY" id="mmf-kc-eG6"/>
+                                    <constraint firstItem="vht-dF-6tO" firstAttribute="centerX" secondItem="Kno-bP-mrh" secondAttribute="centerX" id="wtn-V2-WvP"/>
+                                    <constraint firstAttribute="bottom" secondItem="vht-dF-6tO" secondAttribute="bottom" constant="-64" id="xku-f9-8yF"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vht-dF-6tO" firstAttribute="top" secondItem="aLH-gZ-wPe" secondAttribute="bottom" id="EuG-lr-B6H"/>
-                            <constraint firstItem="vht-dF-6tO" firstAttribute="leading" secondItem="uxt-3J-fkv" secondAttribute="leadingMargin" id="JBR-gh-kSt"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="vht-dF-6tO" secondAttribute="trailing" id="Tfb-bc-Isn"/>
-                            <constraint firstItem="Wmc-f2-WfP" firstAttribute="top" secondItem="vht-dF-6tO" secondAttribute="bottom" id="rBl-pB-GDg"/>
+                            <constraint firstAttribute="bottom" secondItem="Kno-bP-mrh" secondAttribute="bottom" id="DP2-nX-wmL"/>
+                            <constraint firstItem="Kno-bP-mrh" firstAttribute="leading" secondItem="uxt-3J-fkv" secondAttribute="leading" id="NkX-hd-4mn"/>
+                            <constraint firstAttribute="trailing" secondItem="Kno-bP-mrh" secondAttribute="trailing" id="hav-gz-Uot"/>
+                            <constraint firstItem="48h-Wi-uZb" firstAttribute="centerX" secondItem="uxt-3J-fkv" secondAttribute="centerX" id="lbU-wL-CUX"/>
+                            <constraint firstItem="Kno-bP-mrh" firstAttribute="top" secondItem="uxt-3J-fkv" secondAttribute="top" id="nDG-PF-LJR"/>
+                            <constraint firstItem="48h-Wi-uZb" firstAttribute="centerY" secondItem="uxt-3J-fkv" secondAttribute="centerY" id="zaG-uT-vWy"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="vht-dF-6tO" id="mil-ke-POz"/>
+                        <outlet property="scrollView" destination="Kno-bP-mrh" id="5So-Zi-y0L"/>
+                        <outlet property="spinner" destination="48h-Wi-uZb" id="ULt-gK-Fbb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="caJ-nD-uDq" userLabel="First Responder" sceneMemberID="firstResponder"/>
