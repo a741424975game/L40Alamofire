@@ -52,6 +52,52 @@ extension Request {
             completionHandler: completionHandler
         )
     }
+    
+    /**
+        创建一个comment serializer
+    */
+
+    public static func CommentResponseSerializer(
+        options options: NSJSONReadingOptions = .AllowFragments)
+        -> ResponseSerializer<[NSDictionary], NSError>
+    {
+        return ResponseSerializer { _, response, data, error in
+            guard error == nil else { return .Failure(error!) }
+            
+            if let response = response where response.statusCode == 204 { return .Success([NSDictionary]()) }
+            
+            guard let validData = data where validData.length > 0 else {
+                let failureReason = "JSON could not be serialized. Input data was nil or zero length."
+                let error = Error.errorWithCode(.JSONSerializationFailed, failureReason: failureReason)
+                return .Failure(error)
+            }
+            
+            do {
+                let JSON = try NSJSONSerialization.JSONObjectWithData(validData, options: options)
+                let comments = JSON.objectForKey("comments") as! [NSDictionary]
+                return .Success(comments)
+            } catch {
+                return .Failure(error as NSError)
+            }
+        }
+    }
+    
+    /**
+     处理 comment 闭包
+     */
+    public func responseComment(
+        queue queue: dispatch_queue_t? = nil,
+              options: NSJSONReadingOptions = .AllowFragments,
+              completionHandler: Response<[NSDictionary], NSError> -> Void)
+        -> Self
+    {
+        return response(
+            queue: queue,
+            responseSerializer: Request.CommentResponseSerializer(options: options),
+            completionHandler: completionHandler
+        )
+    }
+
 }
 
 
@@ -75,6 +121,8 @@ struct Five100px {
         
         case Photo(Int,ImageSize)
         case Popular(Int)
+        case Comment(Int)
+
         
             var URLRequest: NSMutableURLRequest { 
             
@@ -92,6 +140,11 @@ struct Five100px {
                         "page":"\(page)",
                     ]
                     return ("/photos",params)
+                case .Comment(let id):
+                    let params = [
+                        "consumer_key":Router.consumerKey,
+                    ]
+                    return ("/photos/\(id)/comments",params)
                 }
             }()
             
@@ -177,36 +230,36 @@ class PhotoInfo: NSObject {
         self.id = id
         self.url = url
     }
-    
+    //通过字典初始化
     required init(photo: NSDictionary) {
-        self.id = photo.valueForKey("id") as! Int
-        self.url = photo.valueForKey("image_url") as! String
+        self.id = photo.objectForKey("id") as! Int
+        self.url = photo.objectForKey("image_url") as! String
         
-        self.name = photo.valueForKey("name") as? String
+        self.name = photo.objectForKey("name") as? String
         
-        self.favoritesCount = photo.valueForKey("favorites_Count") as? Int
-        self.votesCount = photo.valueForKey("votes_count") as? Int
-        self.commentsCount = photo.valueForKey("comments_count") as? Int
+        self.favoritesCount = photo.objectForKey("favorites_Count") as? Int
+        self.votesCount = photo.objectForKey("votes_count") as? Int
+        self.commentsCount = photo.objectForKey("comments_count") as? Int
         
-        self.highest = photo.valueForKey("highest_rating") as? Float
-        self.pulse = photo.valueForKey("rating") as? Float
-        self.views = photo.valueForKey("times_viewed") as? Int
-        self.camera = photo.valueForKey("camera") as? String
-        self.focalLength = photo.valueForKey("focal_length") as? String
-        self.shutterSpeed = photo.valueForKey("shutter_speed") as? String
-        self.aperture = photo.valueForKey("aperture") as? String
-        self.iso = photo.valueForKey("iso") as? String
-        self.category = photo.valueForKey("category") as? Five100px.Category
-        self.taken = photo.valueForKey("taken_at") as? String
-        uploaded = photo.valueForKey("created_at") as? String
-        self.desc = photo.valueForKey("description") as? String
+        self.highest = photo.objectForKey("highest_rating") as? Float
+        self.pulse = photo.objectForKey("rating") as? Float
+        self.views = photo.objectForKey("times_viewed") as? Int
+        self.camera = photo.objectForKey("camera") as? String
+        self.focalLength = photo.objectForKey("focal_length") as? String
+        self.shutterSpeed = photo.objectForKey("shutter_speed") as? String
+        self.aperture = photo.objectForKey("aperture") as? String
+        self.iso = photo.objectForKey("iso") as? String
+        self.category = photo.objectForKey("category") as? Five100px.Category
+        self.taken = photo.objectForKey("taken_at") as? String
+        uploaded = photo.objectForKey("created_at") as? String
+        self.desc = photo.objectForKey("description") as? String
         
-        self.username = photo.valueForKey("user")?.valueForKey("username") as? String
-        self.fullname = photo.valueForKey("user")?.valueForKey("fullname") as? String
-        self.userPictureURL = photo.valueForKey("user")?.valueForKey("https://pacdn.500px.org/118456/d01fb5d601955e87f7ab61c01acd1b12c8e0581a/1.jpg?13") as? String
+        self.username = photo.objectForKey("user")?.objectForKey("username") as? String
+        self.fullname = photo.objectForKey("user")?.objectForKey("fullname") as? String
+        self.userPictureURL = photo.objectForKey("user")?.objectForKey("https://pacdn.500px.org/118456/d01fb5d601955e87f7ab61c01acd1b12c8e0581a/1.jpg?13") as? String
         
     }
-    
+    //通过全赋值初始化
   required init(
     id: Int,
     url: String,
@@ -302,4 +355,10 @@ class Comment {
     userPictureURL = JSON.valueForKeyPath("user.userpic_url") as! String
     commentBody = JSON.valueForKeyPath("body") as! String
   }
+    required init(comment: NSDictionary) {
+        userFullname = comment.objectForKey("user")?.objectForKey("fullname") as! String
+        userPictureURL = comment.objectForKey("user")?.objectForKey("userpic_url") as! String
+        commentBody = comment.objectForKey("body")! as! String
+    }
+    
 }

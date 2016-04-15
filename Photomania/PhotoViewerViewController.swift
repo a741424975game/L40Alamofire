@@ -38,7 +38,7 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
   }
     
     func getHighDefinitionPhoto(photoID: Int) {
-        //调用my500pxAPI 详见https://github.com/a741424975game/my500pxAPI
+        //调用my500pxAPI 详见https://github.com/a741424975game/my500pxAPI ps:官方的高清图有水印 所以自己爬了个
         let url = "http://gzpweb.imwork.net/photo/\(photoID)"
         
         Alamofire.request(.GET, url).responseJSON { (response) in
@@ -189,25 +189,23 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
   // MARK: Download Photo
   
   func showActions() {
-    let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Download Photo")
-    
-    actionSheet.showFromToolbar(navigationController!.toolbar)
-//    let cancelButton = UIButton()
+//    let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Download Photo")
 //    
-//    let actionSheet = UIAlertController(title: nil, message: "Do you want to download this photo ?", preferredStyle: .ActionSheet)
-//    
+//    actionSheet.showFromToolbar(navigationController!.toolbar)
+    let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+    let cancel = UIAlertAction(title: "cancel", style: UIAlertActionStyle.Cancel, handler: nil)
+    let downloadPhoto = UIAlertAction(title: "download", style: UIAlertActionStyle.Default) { (action:UIAlertAction!) in
+        print("download")
+    }
+    actionSheet.addAction(cancel)
+    actionSheet.addAction(downloadPhoto)
+    self.presentViewController(actionSheet, animated: true, completion: nil)
     
   }
 
   
-  func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-    if buttonIndex == 1 {
-      downloadPhoto()
-    }
-  }
-  
-  func downloadPhoto() {
-  }
+
+    
   
   // MARK: Gesture Recognizers
   
@@ -220,7 +218,7 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     let hidden = navigationController?.navigationBar.hidden ?? false
     navigationController?.setNavigationBarHidden(!hidden, animated: true)
     navigationController?.setToolbarHidden(!hidden, animated: true)
-    UIApplication.sharedApplication().setStatusBarHidden(!hidden, withAnimation: .Slide)
+    navigationController?.prefersStatusBarHidden()
   }
   
   // MARK: ScrollView

@@ -35,14 +35,14 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
 //    Alamofire.request(.GET, "https://api.500px.com/v1/photos", parameters: ["consumer_key":"c3EQxcUE9TnWtfXZ0sUru81OJtHmJBf0yAe8ups5"]).responseJSON { (response) in
 //        if let json = response.result.value as? NSDictionary {
 //            
-//            var safephotos = json.valueForKey("photos") as! [NSDictionary]
+//            var safephotos = json.objectForKey("photos") as! [NSDictionary]
 //            
 //            safephotos = safephotos.filter({ (photo) -> Bool in //过滤不可使用图片
-//                photo.valueForKey("nsfw") as! Bool == false
+//                photo.objectForKey("nsfw") as! Bool == false
 //            })
 //            
 //            let photosInfo = safephotos.map({ (photo) -> PhotoInfo in
-//                PhotoInfo(id: photo.valueForKey("id") as! Int, url: photo.valueForKey("image_url") as! String)
+//                PhotoInfo(id: photo.objectForKey("id") as! Int, url: photo.objectForKey("image_url") as! String)
 //            })
 //            
 //            self.photos = photosInfo
@@ -60,10 +60,10 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
             isGettingPhotos = true
             Alamofire.request(Five100px.Router.Popular(currentPage)).responseJSON(queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), options: NSJSONReadingOptions.AllowFragments) { (response) in
                 if let json = response.result.value as? NSDictionary {
-                    var safephotos = json.valueForKey("photos") as! [NSDictionary]
+                    var safephotos = json.objectForKey("photos") as! [NSDictionary]
                     
                     safephotos = safephotos.filter({ (photo) -> Bool in //过滤不可使用图片
-                        photo.valueForKey("nsfw") as! Bool == false
+                        photo.objectForKey("nsfw") as! Bool == false
                     })
                     
                     let photosInfo = safephotos.map({ (photo) -> PhotoInfo in
@@ -163,8 +163,6 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
     }
     
 
-    
-    
     
     return cell
   }

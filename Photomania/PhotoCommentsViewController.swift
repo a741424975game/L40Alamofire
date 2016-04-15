@@ -7,22 +7,35 @@
 //
 
 import UIKit
+import Alamofire
 
 class PhotoCommentsViewController: UITableViewController {
   var photoID: Int = 0
   var comments: [Comment]?
   
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
   // MARK: Life-Cycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+    spinner.startAnimating()
+    self.tableView.addSubview(spinner)
     tableView.rowHeight = UITableViewAutomaticDimension
     tableView.estimatedRowHeight = 50.0
     
     title = "Comments"
-    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .Done, target: self, action: #selector(PhotoCommentsViewController.dismiss))
+    navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .Done, target: self, action: #selector(PhotoCommentsViewController.dismiss))
+        loadComment()
   }
+    func loadComment() {
+        Alamofire.request(Five100px.Router.Comment(photoID)).responseComment { (response) in
+           self.comments = response.result.value!.map({ (comment) -> Comment in
+            Comment(comment: comment)
+           })
+            self.spinner.stopAnimating()
+            self.tableView.reloadData()
+        }
+    }
   
   func dismiss() {
     dismissViewControllerAnimated(true, completion: nil)
@@ -30,13 +43,18 @@ class PhotoCommentsViewController: UITableViewController {
   
   // MARK: - TableView
   
+    
   override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return comments?.count ?? 0
   }
   
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("CommentCell", forIndexPath: indexPath) as! PhotoCommentTableViewCell
-    
+    Alamofire.request(.GET, comments![indexPath.row].userPictureURL).responseImage { (response) in
+        cell.userImageView.image = response.result.value!
+    }
+    cell.commentLabel.text = comments![indexPath.row].commentBody
+    cell.userFullnameLabel.text = comments![indexPath.row].userFullname
     return cell
   }
 }
