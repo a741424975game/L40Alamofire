@@ -67,7 +67,7 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
                     })
                     
                     let photosInfo = safephotos.map({ (photo) -> PhotoInfo in
-                        PhotoInfo(id: photo.valueForKey("id") as! Int, url: photo.valueForKey("image_url") as! String)
+                        PhotoInfo(photo: photo)
                     })
                     
                     let lastItem = self.photos.count

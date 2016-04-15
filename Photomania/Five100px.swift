@@ -173,9 +173,89 @@ class PhotoInfo: NSObject {
   var fullname: String?
   var userPictureURL: String?
   
-  init(id: Int, url: String) {
+    init(id: Int, url: String) {
+        self.id = id
+        self.url = url
+    }
+    
+    required init(photo: NSDictionary) {
+        self.id = photo.valueForKey("id") as! Int
+        self.url = photo.valueForKey("image_url") as! String
+        
+        self.name = photo.valueForKey("name") as? String
+        
+        self.favoritesCount = photo.valueForKey("favorites_Count") as? Int
+        self.votesCount = photo.valueForKey("votes_count") as? Int
+        self.commentsCount = photo.valueForKey("comments_count") as? Int
+        
+        self.highest = photo.valueForKey("highest_rating") as? Float
+        self.pulse = photo.valueForKey("rating") as? Float
+        self.views = photo.valueForKey("times_viewed") as? Int
+        self.camera = photo.valueForKey("camera") as? String
+        self.focalLength = photo.valueForKey("focal_length") as? String
+        self.shutterSpeed = photo.valueForKey("shutter_speed") as? String
+        self.aperture = photo.valueForKey("aperture") as? String
+        self.iso = photo.valueForKey("iso") as? String
+        self.category = photo.valueForKey("category") as? Five100px.Category
+        self.taken = photo.valueForKey("taken_at") as? String
+        uploaded = photo.valueForKey("created_at") as? String
+        self.desc = photo.valueForKey("description") as? String
+        
+        self.username = photo.valueForKey("user")?.valueForKey("username") as? String
+        self.fullname = photo.valueForKey("user")?.valueForKey("fullname") as? String
+        self.userPictureURL = photo.valueForKey("user")?.valueForKey("https://pacdn.500px.org/118456/d01fb5d601955e87f7ab61c01acd1b12c8e0581a/1.jpg?13") as? String
+        
+    }
+    
+  required init(
+    id: Int,
+    url: String,
+    name: String?,
+    
+    favoritesCount: Int?,
+    votesCount: Int?,
+    commentsCount: Int?,
+    
+    highest: Float?,
+    pulse: Float?,
+    views: Int?,
+    camera: String?,
+    focalLength: String?,
+    shutterSpeed: String?,
+    aperture: String?,
+    iso: String?,
+    category: Five100px.Category?,
+    taken: String?,
+    uploaded: String?,
+    desc: String?,
+    
+    username: String?,
+    fullname: String?,
+    userPictureURL: String?
+    ) {
     self.id = id
     self.url = url
+    
+    self.favoritesCount = favoritesCount
+    self.votesCount = votesCount
+    self.commentsCount = commentsCount
+    self.highest = highest
+    self.pulse = pulse
+    self.views = views
+    self.camera = camera
+    self.focalLength = focalLength
+    self.shutterSpeed = shutterSpeed
+    self.aperture = aperture
+    self.iso = iso
+    self.taken = taken
+    self.uploaded = uploaded
+    self.desc = desc
+    self.name = name
+    
+    self.username = username
+    self.fullname = fullname
+    self.userPictureURL = userPictureURL
+    
   }
   
   required init(response: NSHTTPURLResponse, representation: AnyObject) {

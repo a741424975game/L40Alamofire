@@ -35,12 +35,7 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
         photoID = (photoInfo?.id)!
         self.getHighDefinitionPhoto(self.photoID)
     }
- 
-    
-
   }
-    
-    
     
     func getHighDefinitionPhoto(photoID: Int) {
         //调用my500pxAPI 详见https://github.com/a741424975game/my500pxAPI
@@ -197,7 +192,13 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Download Photo")
     
     actionSheet.showFromToolbar(navigationController!.toolbar)
+//    let cancelButton = UIButton()
+//    
+//    let actionSheet = UIAlertController(title: nil, message: "Do you want to download this photo ?", preferredStyle: .ActionSheet)
+//    
+    
   }
+
   
   func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
     if buttonIndex == 1 {

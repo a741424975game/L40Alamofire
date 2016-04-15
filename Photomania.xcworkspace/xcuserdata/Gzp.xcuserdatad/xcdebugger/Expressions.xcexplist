@@ -3,13 +3,21 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PhotoDetailsViewController.viewDidLoad() -&gt; ():PhotoDetailsViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photoInfo">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PhotoBrowserCollectionViewController.(getPopularPhotos() -&gt; ()).(closure #1):PhotoBrowserCollectionViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "currentPage">
+               value = "lastItem..&lt;self.photos.count">
             </PersistentString>
             <PersistentString
-               value = "lastItem..&lt;self.photos.count">
+               value = "currentPage">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
