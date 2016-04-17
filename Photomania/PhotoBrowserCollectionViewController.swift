@@ -29,8 +29,8 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    self.setupView()
-    self.createDownLoadedPhotoDir()
+    setupView()
+    
     
 //    Alamofire.request(.GET, "https://api.500px.com/v1/photos", parameters: ["consumer_key":"c3EQxcUE9TnWtfXZ0sUru81OJtHmJBf0yAe8ups5"]).responseJSON { (response) in
 //        if let json = response.result.value as? NSDictionary {
@@ -54,15 +54,6 @@ class PhotoBrowserCollectionViewController: UICollectionViewController, UICollec
     
     self.getPopularPhotos()
   }
-    
-    func createDownLoadedPhotoDir() {
-        do {
-            try NSFileManager.defaultManager().createDirectoryAtURL(NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent("photos"), withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            print("\(error)")
-        }
-
-    }
     
     func getPopularPhotos() {
         if !self.isGettingPhotos {
@@ -245,16 +236,16 @@ class PhotoBrowserCollectionViewCell: UICollectionViewCell {
 
 class PhotoBrowserCollectionViewLoadingCell: UICollectionReusableView {
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.WhiteLarge)
-    
+  
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
   
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        self.spinner.center = self.center  //横屏时并不在屏幕中央  待解决
-        self.spinner.startAnimating()
+    
+        spinner.startAnimating()
+        spinner.center = self.center
         addSubview(spinner)
     }
 }
