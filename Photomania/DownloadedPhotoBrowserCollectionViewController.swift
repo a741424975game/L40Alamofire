@@ -70,7 +70,7 @@ class DownloadedPhotoBrowserCollectionViewController: UICollectionViewController
     
     cell.imageView.image = image
     
-    print(downloadedPhotoURLs![indexPath.item].path!)
+//    print(downloadedPhotoURLs![indexPath.item].path!)
     
     return cell
   }

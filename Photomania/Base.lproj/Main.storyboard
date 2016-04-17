@@ -91,13 +91,7 @@
                                     <constraint firstAttribute="bottom" secondItem="vht-dF-6tO" secondAttribute="bottom" id="VTJ-Uu-nLk"/>
                                     <constraint firstItem="vht-dF-6tO" firstAttribute="centerY" secondItem="Kno-bP-mrh" secondAttribute="centerY" id="mmf-kc-eG6"/>
                                     <constraint firstItem="vht-dF-6tO" firstAttribute="centerX" secondItem="Kno-bP-mrh" secondAttribute="centerX" id="wtn-V2-WvP"/>
-                                    <constraint firstAttribute="bottom" secondItem="vht-dF-6tO" secondAttribute="bottom" constant="-64" id="xku-f9-8yF"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="xku-f9-8yF"/>
-                                    </mask>
-                                </variation>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
