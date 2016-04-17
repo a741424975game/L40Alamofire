@@ -194,14 +194,50 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
 //    actionSheet.showFromToolbar(navigationController!.toolbar)
     let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
     let cancel = UIAlertAction(title: "cancel", style: UIAlertActionStyle.Cancel, handler: nil)
-    let downloadPhoto = UIAlertAction(title: "download", style: UIAlertActionStyle.Default) { (action:UIAlertAction!) in
-        print("download")
+    let download = UIAlertAction(title: "download", style: UIAlertActionStyle.Default) { (action:UIAlertAction!) in
+            self.downloadPhoto()
     }
     actionSheet.addAction(cancel)
-    actionSheet.addAction(downloadPhoto)
+    actionSheet.addAction(download)
     self.presentViewController(actionSheet, animated: true, completion: nil)
     
   }
+    
+    func downloadPhoto() {
+        let progressIndicatorView = UIProgressView(frame: CGRect(x: 0.0, y: 80.0, width: self.view.bounds.width, height: 10.0))
+        progressIndicatorView.tintColor = UIColor.blueColor()
+        self.view.addSubview(progressIndicatorView)
+        
+        let destination: (NSURL, NSHTTPURLResponse) -> (NSURL) = {
+            (temporaryURL, response) in
+            var directoryUrl = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+            directoryUrl = directoryUrl.URLByAppendingPathComponent("photos/\(self.photoID).jpg")
+            return directoryUrl
+        }
+
+        Alamofire.download(.GET, self.imageUrl, destination: destination).progress { bytesRead, totalBytesRead, totalBytesExpectedToRead in
+            print(totalBytesRead)
+            
+            // This closure is NOT called on the main queue for performance
+            // reasons. To update your ui, dispatch to the main queue.
+                dispatch_async(dispatch_get_main_queue()) {
+                      progressIndicatorView.setProgress(Float(totalBytesRead) / Float(totalBytesExpectedToRead), animated: true)
+                }
+            }
+            .response { _, _, _, error in
+                if let error = error {
+                    print("Failed with error: \(error)")
+                } else {
+                    print("Downloaded file successfully")
+                    dispatch_async(dispatch_get_main_queue()) {
+                        progressIndicatorView.hidden = true
+                    }
+                }
+        }
+        
+        
+    }
+
 
   
 
