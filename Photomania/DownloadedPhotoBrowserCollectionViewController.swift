@@ -70,7 +70,10 @@ class DownloadedPhotoBrowserCollectionViewController: UICollectionViewController
     cell.imageView.image = image
     
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of a45ba9e... change
     print(downloadedPhotoURLs![indexPath.item].path!)
     
 >>>>>>> parent of a45ba9e... change
