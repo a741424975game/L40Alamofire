@@ -39,7 +39,7 @@ class PhotoViewerViewController: UIViewController, UIScrollViewDelegate, UIPopov
     
     func getHighDefinitionPhoto(photoID: Int) {
         //调用my500pxAPI 详见https://github.com/a741424975game/my500pxAPI ps:官方的高清图有水印 所以自己爬了个
-        let url = "http://gzpweb.imwork.net/photo/\(photoID)"
+        let url = "http://gzpweb.imwork.net:500/photo/\(photoID)"
         
         Alamofire.request(.GET, url).responseJSON { (response) in
             if let str = response.result.value?.valueForKey("imageUrl") {
