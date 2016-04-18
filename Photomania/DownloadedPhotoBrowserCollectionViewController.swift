@@ -68,7 +68,7 @@ class DownloadedPhotoBrowserCollectionViewController: UICollectionViewController
     let image = UIImage(data: localFileData!, scale: UIScreen.mainScreen().scale)
     
     cell.imageView.image = image
-
+    print(downloadedPhotoURLs![indexPath.item].path!)
     return cell
   }
 }
