@@ -13,7 +13,7 @@
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="Cwl-do-04y">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="cbo-yN-QpT">
+                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="1" id="cbo-yN-QpT">
                             <size key="itemSize" width="50" height="50"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -77,7 +77,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kno-bP-mrh">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vht-dF-6tO">
+                                    <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vht-dF-6tO">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                         <accessibility key="accessibilityConfiguration">
                                             <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
@@ -85,13 +85,19 @@
                                     </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="vht-dF-6tO" firstAttribute="top" secondItem="Kno-bP-mrh" secondAttribute="top" constant="64" id="4ji-7L-mTX"/>
+                                    <constraint firstItem="vht-dF-6tO" firstAttribute="top" secondItem="Kno-bP-mrh" secondAttribute="top" id="4ji-7L-mTX"/>
                                     <constraint firstItem="vht-dF-6tO" firstAttribute="leading" secondItem="Kno-bP-mrh" secondAttribute="leading" id="Dg6-8w-0ip"/>
                                     <constraint firstAttribute="trailing" secondItem="vht-dF-6tO" secondAttribute="trailing" id="PzF-iQ-eDT"/>
+                                    <constraint firstAttribute="bottom" secondItem="vht-dF-6tO" secondAttribute="bottom" id="VTJ-Uu-nLk"/>
                                     <constraint firstItem="vht-dF-6tO" firstAttribute="centerY" secondItem="Kno-bP-mrh" secondAttribute="centerY" id="mmf-kc-eG6"/>
                                     <constraint firstItem="vht-dF-6tO" firstAttribute="centerX" secondItem="Kno-bP-mrh" secondAttribute="centerX" id="wtn-V2-WvP"/>
                                     <constraint firstAttribute="bottom" secondItem="vht-dF-6tO" secondAttribute="bottom" constant="-64" id="xku-f9-8yF"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="xku-f9-8yF"/>
+                                    </mask>
+                                </variation>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -411,6 +417,9 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="B54-4m-cie">
+                                            <rect key="frame" x="18" y="18" width="20" height="20"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
@@ -427,6 +436,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="commentLabel" destination="d0k-lS-hq8" id="6xr-W9-tsK"/>
+                                    <outlet property="spinner" destination="B54-4m-cie" id="tH3-VO-SDI"/>
                                     <outlet property="userFullnameLabel" destination="Sdg-js-y6w" id="1Qr-XA-erU"/>
                                     <outlet property="userImageView" destination="29h-aC-9jp" id="9Hi-85-DZW"/>
                                 </connections>

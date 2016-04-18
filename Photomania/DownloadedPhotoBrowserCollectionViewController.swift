@@ -33,16 +33,17 @@ class DownloadedPhotoBrowserCollectionViewController: UICollectionViewController
     titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
     navigationItem.titleView = titleLabel
   }
-  
+
+    
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     
-    let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+    let directoryURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0].URLByAppendingPathComponent("photos/")
     var error: NSError?
     
     let urls: [AnyObject]?
     do {
-        urls = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(directoryURL, includingPropertiesForKeys: nil, options: [])
+        urls = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(directoryURL, includingPropertiesForKeys: nil, options: .SkipsHiddenFiles)
     } catch let error1 as NSError {
         error = error1
         urls = nil
@@ -68,7 +69,9 @@ class DownloadedPhotoBrowserCollectionViewController: UICollectionViewController
     let image = UIImage(data: localFileData!, scale: UIScreen.mainScreen().scale)
     
     cell.imageView.image = image
+    
     print(downloadedPhotoURLs![indexPath.item].path!)
+    
     return cell
   }
 }

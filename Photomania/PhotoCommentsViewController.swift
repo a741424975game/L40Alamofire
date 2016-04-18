@@ -50,8 +50,13 @@ class PhotoCommentsViewController: UITableViewController {
   
   override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCellWithIdentifier("CommentCell", forIndexPath: indexPath) as! PhotoCommentTableViewCell
+    
+    cell.spinner.startAnimating()
     Alamofire.request(.GET, comments![indexPath.row].userPictureURL).responseImage { (response) in
+        if response.result.value != nil {
         cell.userImageView.image = response.result.value!
+            cell.spinner.stopAnimating()
+        }
     }
     cell.commentLabel.text = comments![indexPath.row].commentBody
     cell.userFullnameLabel.text = comments![indexPath.row].userFullname
@@ -63,7 +68,7 @@ class PhotoCommentTableViewCell: UITableViewCell {
   @IBOutlet weak var userImageView: UIImageView!
   @IBOutlet weak var commentLabel: UILabel!
   @IBOutlet weak var userFullnameLabel: UILabel!
-  
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
   override func awakeFromNib() {
     super.awakeFromNib()
     
