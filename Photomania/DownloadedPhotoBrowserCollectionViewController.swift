@@ -68,8 +68,7 @@ class DownloadedPhotoBrowserCollectionViewController: UICollectionViewController
     let image = UIImage(data: localFileData!, scale: UIScreen.mainScreen().scale)
     
     cell.imageView.image = image
-=======
->>>>>>> parent of 6b180fb... can download photos
+
     return cell
   }
 }
